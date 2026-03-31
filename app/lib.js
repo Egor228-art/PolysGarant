@@ -1,9 +1,10 @@
 import { sql } from '@vercel/postgres';
 import bcrypt from 'bcryptjs';
 
-// Инициализация таблиц
+// Функция для автоматического создания всех таблиц
 export async function initTables() {
   try {
+    // Таблица пользователей
     await sql`
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
@@ -14,6 +15,7 @@ export async function initTables() {
       )
     `;
     
+    // Таблица полисов
     await sql`
       CREATE TABLE IF NOT EXISTS policies (
         id SERIAL PRIMARY KEY,
@@ -28,6 +30,7 @@ export async function initTables() {
       )
     `;
     
+    // Таблица обращений
     await sql`
       CREATE TABLE IF NOT EXISTS tickets (
         id SERIAL PRIMARY KEY,
@@ -40,11 +43,16 @@ export async function initTables() {
       )
     `;
     
-    console.log('✅ Все таблицы готовы');
+    console.log('✅ Все таблицы созданы/проверены');
+    return true;
   } catch (error) {
     console.error('❌ Ошибка при создании таблиц:', error.message);
+    return false;
   }
 }
+
+// Вызываем инициализацию при импорте
+initTables();
 
 // Пользователи
 export async function getUserByEmail(email) {
@@ -128,7 +136,7 @@ export async function createTicket(userId, subject, message) {
       VALUES (${userId}, ${subject}, ${message})
       RETURNING *
     `;
-    return rows[0];
+    return rows;
   } catch (error) {
     console.error('Ошибка создания обращения:', error.message);
     throw error;

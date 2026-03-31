@@ -7,6 +7,7 @@ import { SessionProvider } from "next-auth/react";
 function HomeContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ email: "", password: "", name: "" });
   const [error, setError] = useState("");
@@ -31,7 +32,10 @@ function HomeContent() {
         redirect: false,
       });
       if (res?.error) setError("Неверный email или пароль");
-      else router.push("/dashboard");
+      else {
+        setIsModalOpen(false);
+        router.push("/dashboard");
+      }
     } else {
       const res = await fetch("/api/register", {
         method: "POST",
@@ -46,6 +50,7 @@ function HomeContent() {
           password: formData.password,
           redirect: false,
         });
+        setIsModalOpen(false);
         router.push("/dashboard");
       }
     }
@@ -62,15 +67,18 @@ function HomeContent() {
       <div className="hero">
         <h1>Защитите то, что цените</h1>
         <p>Надежная страховая защита для вас, вашей семьи и имущества</p>
+        <button className="btn" onClick={() => setIsModalOpen(true)} style={{ marginTop: "2rem", fontSize: "1.1rem", padding: "1rem 2rem" }}>
+          Войти в личный кабинет
+        </button>
       </div>
 
       {/* Калькулятор */}
-      <div className="form-container" style={{ marginTop: 0 }}>
-        <h3 style={{ textAlign: "center", marginBottom: "1.5rem" }}>📊 Калькулятор страховки</h3>
+      <div className="form-container" style={{ marginTop: 0, background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", color: "white" }}>
+        <h3 style={{ textAlign: "center", marginBottom: "1.5rem", color: "white" }}>💰 Калькулятор страховки</h3>
         <select 
           value={calcType} 
           onChange={(e) => setCalcType(e.target.value)}
-          style={{ width: '100%', padding: '0.75rem', border: '2px solid #e5e7eb', borderRadius: '0.75rem', marginBottom: '1rem' }}
+          style={{ width: '100%', padding: '0.75rem', border: 'none', borderRadius: '0.75rem', marginBottom: '1rem', background: 'white', color: '#333' }}
         >
           <option value="auto">🚗 Автострахование (3% от суммы)</option>
           <option value="property">🏠 Недвижимость (0.5% от суммы)</option>
@@ -82,12 +90,16 @@ function HomeContent() {
           value={calcAmount} 
           onChange={(e) => setCalcAmount(Number(e.target.value))}
           placeholder="Страховая сумма (₽)"
+          style={{ background: 'white', color: '#333' }}
         />
-        <button onClick={calculatePrice} style={{ width: '100%' }}>Рассчитать стоимость</button>
+        <button onClick={calculatePrice} style={{ width: '100%', background: 'white', color: '#667eea', boxShadow: 'none' }}>
+          Рассчитать стоимость
+        </button>
         {calcResult && (
-          <div style={{ marginTop: '1rem', padding: '1rem', background: '#f3f4f6', borderRadius: '0.75rem', textAlign: 'center' }}>
-            <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>Стоимость полиса:</p>
-            <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#667eea' }}>{calcResult.toLocaleString()} ₽/год</p>
+          <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(255,255,255,0.2)', borderRadius: '0.75rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.875rem', opacity: 0.9 }}>Стоимость полиса:</p>
+            <p style={{ fontSize: '1.8rem', fontWeight: 'bold' }}>{calcResult.toLocaleString()} ₽</p>
+            <p style={{ fontSize: '0.75rem', opacity: 0.8 }}>в год</p>
           </div>
         )}
       </div>
@@ -97,40 +109,111 @@ function HomeContent() {
         <div className="card">
           <h3>🚗 Автострахование</h3>
           <p>ОСАГО и КАСКО с кэшбэком до 15%</p>
-          <button className="btn-outline" onClick={() => setIsLogin(false)}>от 5 000 ₽</button>
+          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#667eea' }}>от 5 000 ₽</p>
+          <button className="btn-outline" onClick={() => setIsModalOpen(true)}>Оформить</button>
         </div>
         <div className="card">
           <h3>🏠 Недвижимость</h3>
           <p>Защита от пожара, затопления и взлома</p>
-          <button className="btn-outline" onClick={() => setIsLogin(false)}>от 3 000 ₽</button>
+          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#667eea' }}>от 3 000 ₽</p>
+          <button className="btn-outline" onClick={() => setIsModalOpen(true)}>Оформить</button>
         </div>
         <div className="card">
           <h3>❤️ Здоровье</h3>
           <p>ДМС с покрытием по всей России</p>
-          <button className="btn-outline" onClick={() => setIsLogin(false)}>от 15 000 ₽</button>
+          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#667eea' }}>от 15 000 ₽</p>
+          <button className="btn-outline" onClick={() => setIsModalOpen(true)}>Оформить</button>
         </div>
         <div className="card">
           <h3>✈️ Путешествия</h3>
           <p>Медицинская помощь за границей</p>
-          <button className="btn-outline" onClick={() => setIsLogin(false)}>от 1 500 ₽</button>
+          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#667eea' }}>от 1 500 ₽</p>
+          <button className="btn-outline" onClick={() => setIsModalOpen(true)}>Оформить</button>
         </div>
       </div>
 
-      {/* Форма входа/регистрации */}
-      <div className="form-container">
-        <div className="form-tabs">
-          <button className={`tab-btn ${isLogin ? 'active' : ''}`} onClick={() => setIsLogin(true)}>Вход</button>
-          <button className={`tab-btn ${!isLogin ? 'active' : ''}`} onClick={() => setIsLogin(false)}>Регистрация</button>
+      {/* Модальное окно */}
+      {isModalOpen && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0,0,0,0.5)',
+          backdropFilter: 'blur(5px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+          padding: '1rem'
+        }} onClick={() => setIsModalOpen(false)}>
+          <div className="form-container" style={{ maxWidth: '450px', width: '100%', margin: 0, position: 'relative' }} onClick={(e) => e.stopPropagation()}>
+            <button 
+              onClick={() => setIsModalOpen(false)}
+              style={{
+                position: 'absolute',
+                top: '1rem',
+                right: '1rem',
+                background: 'none',
+                fontSize: '1.5rem',
+                padding: 0,
+                width: '2rem',
+                height: '2rem',
+                boxShadow: 'none',
+                color: '#6b7280'
+              }}
+            >
+              ×
+            </button>
+            
+            <div className="form-tabs">
+              <button className={`tab-btn ${isLogin ? 'active' : ''}`} onClick={() => setIsLogin(true)}>Вход</button>
+              <button className={`tab-btn ${!isLogin ? 'active' : ''}`} onClick={() => setIsLogin(false)}>Регистрация</button>
+            </div>
+            
+            <form onSubmit={handleSubmit}>
+              {!isLogin && (
+                <input 
+                  type="text" 
+                  placeholder="Ваше имя" 
+                  value={formData.name} 
+                  onChange={(e) => setFormData({...formData, name: e.target.value})} 
+                  required 
+                />
+              )}
+              <input 
+                type="email" 
+                placeholder="Email" 
+                value={formData.email} 
+                onChange={(e) => setFormData({...formData, email: e.target.value})} 
+                required 
+              />
+              <input 
+                type="password" 
+                placeholder="Пароль" 
+                value={formData.password} 
+                onChange={(e) => setFormData({...formData, password: e.target.value})} 
+                required 
+              />
+              {error && <p style={{ color: "#dc2626", marginBottom: "1rem" }}>{error}</p>}
+              <button type="submit" style={{ width: "100%" }}>
+                {isLogin ? "Войти" : "Зарегистрироваться"}
+              </button>
+            </form>
+            
+            <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.875rem", color: "#6b7280" }}>
+              {isLogin ? "Нет аккаунта? " : "Уже есть аккаунт? "}
+              <button 
+                onClick={() => setIsLogin(!isLogin)} 
+                style={{ background: "none", color: "#667eea", padding: 0, boxShadow: "none", display: "inline" }}
+              >
+                {isLogin ? "Зарегистрироваться" : "Войти"}
+              </button>
+            </p>
+          </div>
         </div>
-        
-        <form onSubmit={handleSubmit}>
-          {!isLogin && <input type="text" placeholder="Ваше имя" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />}
-          <input type="email" placeholder="Email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required />
-          <input type="password" placeholder="Пароль" value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} required />
-          {error && <p style={{ color: "#dc2626", marginBottom: "1rem" }}>{error}</p>}
-          <button type="submit" style={{ width: "100%" }}>{isLogin ? "Войти" : "Зарегистрироваться"}</button>
-        </form>
-      </div>
+      )}
     </div>
   );
 }
