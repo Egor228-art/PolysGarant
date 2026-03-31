@@ -12,12 +12,22 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru">
       <body className={inter.className}>
-        <header style={{ padding: '1rem', background: '#0a2540', color: 'white', textAlign: 'center' }}>
-          <h1 style={{ margin: 0, fontSize: 'clamp(1.2rem, 4vw, 2rem)' }}>Страховая компания "ПолисГарант"</h1>
+        <header className="main-header">
+          <div className="header-content">
+            <div className="logo">
+              <h1>🏛️ ПолисГарант</h1>
+            </div>
+            <div className="trust-badge">
+              <span>⭐ 4.9 | 5000+ клиентов</span>
+            </div>
+          </div>
         </header>
-        <main>{children}</main>
-        <footer style={{ textAlign: 'center', padding: '1rem', background: '#f5f7fa', marginTop: '2rem' }}>
-          <p>© 2024 ПолисГарант. Все права защищены.</p>
+        <main className="container">{children}</main>
+        <footer className="footer">
+          <p>© 2024 ПолисГарант. Надежная защита для вас и вашего имущества</p>
+          <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', opacity: 0.8 }}>
+            Лицензия ЦБ РФ № 1234 | ОСАГО, КАСКО, ДМС, страхование недвижимости
+          </p>
         </footer>
       </body>
     </html>
