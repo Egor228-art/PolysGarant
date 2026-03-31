@@ -5,19 +5,36 @@ export async function POST(request) {
   try {
     const { email, password, name } = await request.json();
     
+    console.log('Регистрация:', { email, name });
+    
     if (!email || !password) {
-      return NextResponse.json({ error: "Заполните поля" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Заполните все поля" },
+        { status: 400 }
+      );
     }
     
-    // Проверка, существует ли уже
+    // Проверка существующего пользователя
     const existingUser = await getUserByEmail(email);
     if (existingUser) {
-      return NextResponse.json({ error: "Email уже зарегистрирован" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Email уже зарегистрирован" },
+        { status: 400 }
+      );
     }
     
+    // Создание пользователя
     const newUser = await createUser(email, password, name);
-    return NextResponse.json({ success: true, user: newUser }, { status: 201 });
+    
+    return NextResponse.json(
+      { success: true, user: newUser },
+      { status: 201 }
+    );
   } catch (error) {
-    return NextResponse.json({ error: "Ошибка сервера" }, { status: 500 });
+    console.error('Ошибка:', error);
+    return NextResponse.json(
+      { error: "Ошибка сервера: " + error.message },
+      { status: 500 }
+    );
   }
 }
