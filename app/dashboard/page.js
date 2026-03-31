@@ -117,7 +117,7 @@ function DashboardContent() {
             </div>
           </div>
           
-          <div className="card" style={{ marginTop: '2rem' }}>
+          <div className="card" style={{ marginTop: '2rem', transform: 'none' }}>
             <h3>⚡ Быстрые действия</h3>
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '1rem' }}>
               <button onClick={() => setActiveTab('new')}>Оформить новый полис</button>

@@ -92,7 +92,7 @@ function HomeContent() {
           placeholder="Страховая сумма (₽)"
           style={{ background: 'white', color: '#333' }}
         />
-        <button onClick={calculatePrice} style={{ width: '100%', background: 'white', color: '#667eea', boxShadow: 'none' }}>
+        <button onClick={calculatePrice} style={{ width: '100%', background: 'white', color: 'var(--orange)', boxShadow: 'none' }}>
           Рассчитать стоимость
         </button>
         {calcResult && (

@@ -7,8 +7,8 @@
 :root {
   --yellow: #e8ea66;
   --orange: #e7946d;
-  --yellowInvisible: #e8ea6654;
-  --orangeInvisible: #e7946d4f;
+  --yellowInvisible: #e8ea66a2;
+  --orangeInvisible: #e7946da9;
 }
 
 body {
@@ -165,7 +165,7 @@ body {
 .tab-btn.active {
   background: linear-gradient(135deg, var(--yellow) 0%, var(--orange) 100%);
   color: white;
-  box-shadow: 0 4px 15px var(--yellow);
+  box-shadow: 0 4px 15px var(--yellowInvisible);
 }
 
 input {
