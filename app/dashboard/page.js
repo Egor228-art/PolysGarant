@@ -112,7 +112,7 @@ function DashboardContent() {
             </div>
             <div className="card">
               <h3>🏆 Скидка за лояльность</h3>
-              <p style={{ fontSize: '2rem', fontWeight: 'bold', color: '#667eea' }}>15%</p>
+              <p style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--orange)' }}>15%</p>
               <p>На следующий полис</p>
             </div>
           </div>
@@ -144,7 +144,7 @@ function DashboardContent() {
                   <p><strong>Сумма:</strong> {policy.amount.toLocaleString()} ₽</p>
                   <p><strong>Период:</strong> {new Date(policy.start_date).toLocaleDateString()} - {new Date(policy.end_date).toLocaleDateString()}</p>
                   <p>{getStatusBadge(policy.status)}</p>
-                  <button style={{ marginTop: '1rem', background: 'transparent', color: '#667eea', border: '2px solid #667eea' }}>
+                  <button style={{ marginTop: '1rem', background: 'transparent', color: 'var(--orange)', border: '2px solid var(--orange)' }}>
                     Скачать полис
                   </button>
                 </div>
@@ -192,7 +192,7 @@ function DashboardContent() {
                   {getStatusBadge(ticket.status)}
                 </div>
                 <p>{ticket.message}</p>
-                <p style={{ fontSize: '0.875rem', color: '#6b7280', marginTop: '1rem' }}>
+                <p style={{ fontSize: '0.875rem', color: '#80806b', marginTop: '1rem' }}>
                   {new Date(ticket.created_at).toLocaleString()}
                 </p>
               </div>

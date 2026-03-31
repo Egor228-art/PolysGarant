@@ -109,25 +109,25 @@ function HomeContent() {
         <div className="card">
           <h3>🚗 Автострахование</h3>
           <p>ОСАГО и КАСКО с кэшбэком до 15%</p>
-          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--yellow)' }}>от 5 000 ₽</p>
+          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--orange)' }}>от 5 000 ₽</p>
           <button className="btn-outline" onClick={() => setIsModalOpen(true)}>Оформить</button>
         </div>
         <div className="card">
           <h3>🏠 Недвижимость</h3>
           <p>Защита от пожара, затопления и взлома</p>
-          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--yellow)' }}>от 3 000 ₽</p>
+          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--orange)' }}>от 3 000 ₽</p>
           <button className="btn-outline" onClick={() => setIsModalOpen(true)}>Оформить</button>
         </div>
         <div className="card">
           <h3>❤️ Здоровье</h3>
           <p>ДМС с покрытием по всей России</p>
-          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--yellow)' }}>от 15 000 ₽</p>
+          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--orange)' }}>от 15 000 ₽</p>
           <button className="btn-outline" onClick={() => setIsModalOpen(true)}>Оформить</button>
         </div>
         <div className="card">
           <h3>✈️ Путешествия</h3>
           <p>Медицинская помощь за границей</p>
-          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--yellow)' }}>от 1 500 ₽</p>
+          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--orange)' }}>от 1 500 ₽</p>
           <button className="btn-outline" onClick={() => setIsModalOpen(true)}>Оформить</button>
         </div>
       </div>
@@ -206,7 +206,7 @@ function HomeContent() {
               {isLogin ? "Нет аккаунта? " : "Уже есть аккаунт? "}
               <button 
                 onClick={() => setIsLogin(!isLogin)} 
-                style={{ background: "none", color: "var(--yellow)", padding: 0, boxShadow: "none", display: "inline" }}
+                style={{ background: "none", color: "var(--orange)", padding: 0, boxShadow: "none", display: "inline" }}
               >
                 {isLogin ? "Зарегистрироваться" : "Войти"}
               </button>

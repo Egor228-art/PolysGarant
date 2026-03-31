@@ -1,5 +1,6 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
+import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,7 +16,9 @@ export default function RootLayout({ children }) {
         <header className="main-header">
           <div className="header-content">
             <div className="logo">
-              <h1>🏛️ ПолисГарант</h1>
+              <Link href="/" style={{ textDecoration: 'none' }}>
+                <h1 style={{ cursor: 'pointer' }}>🏛️ ПолисГарант</h1>
+              </Link>
             </div>
             <div className="trust-badge">
               <span>⭐ 4.9 | 5000+ клиентов</span>
