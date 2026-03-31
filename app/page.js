@@ -73,7 +73,7 @@ function HomeContent() {
       </div>
 
       {/* Калькулятор */}
-      <div className="form-container" style={{ marginTop: 0, background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", color: "white" }}>
+      <div className="form-container" style={{ marginTop: 0, background: "linear-gradient(135deg, var(--yellow) 0%, var(--orange) 100%)", color: "white" }}>
         <h3 style={{ textAlign: "center", marginBottom: "1.5rem", color: "white" }}>💰 Калькулятор страховки</h3>
         <select 
           value={calcType} 
@@ -109,25 +109,25 @@ function HomeContent() {
         <div className="card">
           <h3>🚗 Автострахование</h3>
           <p>ОСАГО и КАСКО с кэшбэком до 15%</p>
-          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#667eea' }}>от 5 000 ₽</p>
+          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--yellow)' }}>от 5 000 ₽</p>
           <button className="btn-outline" onClick={() => setIsModalOpen(true)}>Оформить</button>
         </div>
         <div className="card">
           <h3>🏠 Недвижимость</h3>
           <p>Защита от пожара, затопления и взлома</p>
-          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#667eea' }}>от 3 000 ₽</p>
+          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--yellow)' }}>от 3 000 ₽</p>
           <button className="btn-outline" onClick={() => setIsModalOpen(true)}>Оформить</button>
         </div>
         <div className="card">
           <h3>❤️ Здоровье</h3>
           <p>ДМС с покрытием по всей России</p>
-          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#667eea' }}>от 15 000 ₽</p>
+          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--yellow)' }}>от 15 000 ₽</p>
           <button className="btn-outline" onClick={() => setIsModalOpen(true)}>Оформить</button>
         </div>
         <div className="card">
           <h3>✈️ Путешествия</h3>
           <p>Медицинская помощь за границей</p>
-          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#667eea' }}>от 1 500 ₽</p>
+          <p style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--yellow)' }}>от 1 500 ₽</p>
           <button className="btn-outline" onClick={() => setIsModalOpen(true)}>Оформить</button>
         </div>
       </div>
@@ -161,7 +161,7 @@ function HomeContent() {
                 width: '2rem',
                 height: '2rem',
                 boxShadow: 'none',
-                color: '#6b7280'
+                color: '#80806b'
               }}
             >
               ×
@@ -202,11 +202,11 @@ function HomeContent() {
               </button>
             </form>
             
-            <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.875rem", color: "#6b7280" }}>
+            <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.875rem", color: "#807c6b" }}>
               {isLogin ? "Нет аккаунта? " : "Уже есть аккаунт? "}
               <button 
                 onClick={() => setIsLogin(!isLogin)} 
-                style={{ background: "none", color: "#667eea", padding: 0, boxShadow: "none", display: "inline" }}
+                style={{ background: "none", color: "var(--yellow)", padding: 0, boxShadow: "none", display: "inline" }}
               >
                 {isLogin ? "Зарегистрироваться" : "Войти"}
               </button>

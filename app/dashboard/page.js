@@ -77,7 +77,7 @@ function DashboardContent() {
           <h2>Добро пожаловать, {session.user.name || session.user.email.split('@')[0]}!</h2>
           <div className="user-email">📧 {session.user.email}</div>
         </div>
-        <button onClick={() => signOut({ callbackUrl: "/" })} style={{ background: "#ef4444" }}>
+        <button onClick={() => signOut({ callbackUrl: "/" })} style={{ background: "#ef4444", boxShadow: "#ef444452" }}>
           Выйти
         </button>
       </div>
