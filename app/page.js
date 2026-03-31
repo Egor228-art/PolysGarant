@@ -10,8 +10,11 @@ function HomeContent() {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ email: "", password: "", name: "" });
   const [error, setError] = useState("");
+  const [calcType, setCalcType] = useState("auto");
+  const [calcAmount, setCalcAmount] = useState(1000000);
+  const [calcResult, setCalcResult] = useState(null);
 
-  if (status === "loading") return <div className="container" style={{ textAlign: "center", padding: "4rem" }}>Загрузка...</div>;
+  if (status === "loading") return <div style={{ textAlign: "center", padding: "4rem" }}>Загрузка...</div>;
   if (session) {
     router.push("/dashboard");
     return null;
@@ -48,94 +51,85 @@ function HomeContent() {
     }
   };
 
+  const calculatePrice = () => {
+    const rates = { auto: 0.03, property: 0.005, health: 0.08, travel: 0.04 };
+    const price = calcAmount * (rates[calcType] || 0.03);
+    setCalcResult(price);
+  };
+
   return (
     <div>
-      {/* Герой секция */}
       <div className="hero">
         <h1>Защитите то, что цените</h1>
-        <p>Надежная страховая защита для вас, вашей семьи и имущества. Лучшие тарифы и быстрая выплата</p>
+        <p>Надежная страховая защита для вас, вашей семьи и имущества</p>
       </div>
 
-      {/* Карточки услуг */}
+      {/* Калькулятор */}
+      <div className="form-container" style={{ marginTop: 0 }}>
+        <h3 style={{ textAlign: "center", marginBottom: "1.5rem" }}>📊 Калькулятор страховки</h3>
+        <select 
+          value={calcType} 
+          onChange={(e) => setCalcType(e.target.value)}
+          style={{ width: '100%', padding: '0.75rem', border: '2px solid #e5e7eb', borderRadius: '0.75rem', marginBottom: '1rem' }}
+        >
+          <option value="auto">🚗 Автострахование (3% от суммы)</option>
+          <option value="property">🏠 Недвижимость (0.5% от суммы)</option>
+          <option value="health">❤️ ДМС (8% от суммы)</option>
+          <option value="travel">✈️ Путешествия (4% от суммы)</option>
+        </select>
+        <input 
+          type="number" 
+          value={calcAmount} 
+          onChange={(e) => setCalcAmount(Number(e.target.value))}
+          placeholder="Страховая сумма (₽)"
+        />
+        <button onClick={calculatePrice} style={{ width: '100%' }}>Рассчитать стоимость</button>
+        {calcResult && (
+          <div style={{ marginTop: '1rem', padding: '1rem', background: '#f3f4f6', borderRadius: '0.75rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>Стоимость полиса:</p>
+            <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#667eea' }}>{calcResult.toLocaleString()} ₽/год</p>
+          </div>
+        )}
+      </div>
+
+      {/* Услуги */}
       <div className="grid">
         <div className="card">
           <h3>🚗 Автострахование</h3>
-          <p>ОСАГО и КАСКО с кэшбэком до 15%. Защита от угона, ДТП и повреждений</p>
-          <button className="btn-outline" onClick={() => setIsLogin(false)}>Оформить от 5000 ₽</button>
+          <p>ОСАГО и КАСКО с кэшбэком до 15%</p>
+          <button className="btn-outline" onClick={() => setIsLogin(false)}>от 5 000 ₽</button>
         </div>
         <div className="card">
           <h3>🏠 Недвижимость</h3>
-          <p>Защита квартир и домов от пожара, затопления, стихийных бедствий и незаконного проникновения</p>
-          <button className="btn-outline" onClick={() => setIsLogin(false)}>Рассчитать стоимость</button>
+          <p>Защита от пожара, затопления и взлома</p>
+          <button className="btn-outline" onClick={() => setIsLogin(false)}>от 3 000 ₽</button>
         </div>
         <div className="card">
           <h3>❤️ Здоровье</h3>
-          <p>ДМС с покрытием по всей России. Программы для взрослых, детей и всей семьи</p>
-          <button className="btn-outline" onClick={() => setIsLogin(false)}>Выбрать программу</button>
+          <p>ДМС с покрытием по всей России</p>
+          <button className="btn-outline" onClick={() => setIsLogin(false)}>от 15 000 ₽</button>
         </div>
         <div className="card">
           <h3>✈️ Путешествия</h3>
-          <p>Страхование для поездок за границу. Медицинская помощь, багаж, отмена поездки</p>
-          <button className="btn-outline" onClick={() => setIsLogin(false)}>Оформить онлайн</button>
+          <p>Медицинская помощь за границей</p>
+          <button className="btn-outline" onClick={() => setIsLogin(false)}>от 1 500 ₽</button>
         </div>
       </div>
 
       {/* Форма входа/регистрации */}
       <div className="form-container">
         <div className="form-tabs">
-          <button 
-            className={`tab-btn ${isLogin ? 'active' : ''}`}
-            onClick={() => setIsLogin(true)}
-          >
-            Вход
-          </button>
-          <button 
-            className={`tab-btn ${!isLogin ? 'active' : ''}`}
-            onClick={() => setIsLogin(false)}
-          >
-            Регистрация
-          </button>
+          <button className={`tab-btn ${isLogin ? 'active' : ''}`} onClick={() => setIsLogin(true)}>Вход</button>
+          <button className={`tab-btn ${!isLogin ? 'active' : ''}`} onClick={() => setIsLogin(false)}>Регистрация</button>
         </div>
         
         <form onSubmit={handleSubmit}>
-          {!isLogin && (
-            <input 
-              type="text" 
-              placeholder="Ваше имя" 
-              value={formData.name} 
-              onChange={(e) => setFormData({...formData, name: e.target.value})} 
-              required 
-            />
-          )}
-          <input 
-            type="email" 
-            placeholder="Email" 
-            value={formData.email} 
-            onChange={(e) => setFormData({...formData, email: e.target.value})} 
-            required 
-          />
-          <input 
-            type="password" 
-            placeholder="Пароль" 
-            value={formData.password} 
-            onChange={(e) => setFormData({...formData, password: e.target.value})} 
-            required 
-          />
-          {error && <p style={{ color: "#dc2626", marginBottom: "1rem", textAlign: "center" }}>{error}</p>}
-          <button type="submit" style={{ width: "100%" }}>
-            {isLogin ? "Войти в личный кабинет" : "Зарегистрироваться"}
-          </button>
+          {!isLogin && <input type="text" placeholder="Ваше имя" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />}
+          <input type="email" placeholder="Email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required />
+          <input type="password" placeholder="Пароль" value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} required />
+          {error && <p style={{ color: "#dc2626", marginBottom: "1rem" }}>{error}</p>}
+          <button type="submit" style={{ width: "100%" }}>{isLogin ? "Войти" : "Зарегистрироваться"}</button>
         </form>
-        
-        <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.875rem", color: "#6b7280" }}>
-          {isLogin ? "Нет аккаунта? " : "Уже есть аккаунт? "}
-          <button 
-            onClick={() => setIsLogin(!isLogin)} 
-            style={{ background: "none", color: "#667eea", padding: 0, boxShadow: "none", display: "inline" }}
-          >
-            {isLogin ? "Зарегистрироваться" : "Войти"}
-          </button>
-        </p>
       </div>
     </div>
   );
