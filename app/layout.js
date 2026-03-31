@@ -1,6 +1,5 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
-import Link from 'next/link'
 import { SessionProvider, useSession } from 'next-auth/react'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -13,17 +12,19 @@ export const metadata = {
 function Header() {
   const { data: session } = useSession()
 
+  const goToHome = () => {
+    window.location.href = '/'
+  }
+
   return (
     <header className="main-header">
       <div className="header-content">
-        <Link href="/" style={{ textDecoration: 'none' }}>
-          <div className="logo" style={{ cursor: 'pointer' }}>
-            <h1>🏛️ ПолисГарант</h1>
-          </div>
-        </Link>
+        <div className="logo" onClick={goToHome} style={{ cursor: 'pointer' }}>
+          <h1>🏛️ ПолисГарант</h1>
+        </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           {session?.user && (
-            <Link href="/dashboard" style={{ textDecoration: 'none' }}>
+            <a href="/dashboard" style={{ textDecoration: 'none' }}>
               <div 
                 style={{ 
                   display: 'flex', 
@@ -43,7 +44,7 @@ function Header() {
                   {session.user.name || session.user.email.split('@')[0]}
                 </span>
               </div>
-            </Link>
+            </a>
           )}
           <div className="trust-badge">
             <span>⭐ 4.9 | 5000+ клиентов</span>

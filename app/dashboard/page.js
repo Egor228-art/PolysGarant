@@ -102,12 +102,12 @@ function DashboardContent() {
           <div className="grid">
             <div className="card">
               <h3>📄 Активные полисы</h3>
-              <p style={{ fontSize: '2rem', fontWeight: 'bold' }}>{policies.filter(p => p.status === 'active').length}</p>
+              <p style={{ fontSize: '2rem', fontWeight: 'bold', transform: 'none' }}>{policies.filter(p => p.status === 'active').length}</p>
               <button onClick={() => setActiveTab('policies')}>Управлять</button>
             </div>
             <div className="card">
               <h3>💬 Открытые обращения</h3>
-              <p style={{ fontSize: '2rem', fontWeight: 'bold' }}>{tickets.filter(t => t.status !== 'resolved').length}</p>
+              <p style={{ fontSize: '2rem', fontWeight: 'bold', transform: 'none' }}>{tickets.filter(t => t.status !== 'resolved').length}</p>
               <button onClick={() => setActiveTab('tickets')}>Смотреть</button>
             </div>
             <div className="card">

@@ -165,7 +165,7 @@ body {
 .tab-btn.active {
   background: linear-gradient(135deg, var(--yellow) 0%, var(--orange) 100%);
   color: white;
-  box-shadow: 0 4px 15px var(--yellowInvisible);
+  box-shadow: 0 4px 15px var(--orangeInvisible);
 }
 
 input {
