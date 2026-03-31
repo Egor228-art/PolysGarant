@@ -1,4 +1,4 @@
-import { createUser, getUserByEmail } from "@/app/lib";
+import { createUser, getUserByEmail } from "../../lib";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
