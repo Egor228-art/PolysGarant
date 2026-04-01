@@ -1,66 +1,15 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import Link from 'next/link'
+import { Providers } from './providers'
+import Navigation from './components/Navigation'
+import UserInfo from './components/UserInfo'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'ПолисГарант | Надежная страховая компания',
   description: 'Страхование авто, недвижимости, здоровья и путешествий. Оформите полис онлайн за 5 минут.',
-}
-
-// Клиентский компонент для навигации
-function Navigation() {
-  'use client'
-  const { usePathname } = require('next/navigation')
-  const { useSession } = require('next-auth/react')
-  const pathname = usePathname()
-  const { data: session } = useSession()
-
-  const isActive = (path) => {
-    return pathname === path ? 'active' : ''
-  }
-
-  return (
-    <nav className="main-nav">
-      <div className="nav-container">
-        <div className="nav-links">
-          <Link href="/" className={isActive('/')}>Главная</Link>
-          <Link href="/products" className={isActive('/products')}>Страховые продукты</Link>
-          <Link href="/about" className={isActive('/about')}>О компании</Link>
-          <Link href="/contacts" className={isActive('/contacts')}>Контакты</Link>
-          <Link href="/blog" className={isActive('/blog')}>Новости</Link>
-          <Link href="/faq" className={isActive('/faq')}>FAQ</Link>
-        </div>
-        {session?.user ? (
-          <Link href="/dashboard" className="nav-user">
-            👤 {session.user.name || session.user.email.split('@')[0]}
-          </Link>
-        ) : (
-          <Link href="/?login=true" className="nav-login">Войти</Link>
-        )}
-      </div>
-    </nav>
-  )
-}
-
-// Клиентский компонент для отображения имени пользователя в шапке
-function UserInfo() {
-  'use client'
-  const { useSession } = require('next-auth/react')
-  const { data: session } = useSession()
-
-  return (
-    <div className="header-contacts">
-      <div className="phone">8-800-555-35-35</div>
-      <div className="work-time">Ежедневно 9:00-21:00</div>
-      {session?.user && (
-        <div className="user-badge">
-          👤 {session.user.name || session.user.email.split('@')[0]}
-        </div>
-      )}
-    </div>
-  )
 }
 
 function Header() {
@@ -117,13 +66,6 @@ function Footer() {
   )
 }
 
-// Клиентский компонент-обертка для SessionProvider
-function SessionProviderWrapper({ children }) {
-  'use client'
-  const { SessionProvider } = require('next-auth/react')
-  return <SessionProvider>{children}</SessionProvider>
-}
-
 function RootLayoutContent({ children }) {
   return (
     <>
@@ -138,9 +80,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru">
       <body className={inter.className}>
-        <SessionProviderWrapper>
+        <Providers>
           <RootLayoutContent>{children}</RootLayoutContent>
-        </SessionProviderWrapper>
+        </Providers>
       </body>
     </html>
   )
