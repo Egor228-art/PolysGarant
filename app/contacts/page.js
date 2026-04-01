@@ -1,7 +1,5 @@
-export const dynamic = 'force-dynamic'
-
 "use client";
-
+export const dynamic = 'force-dynamic'
 export default function ContactsPage() {
   return (
     <div className="contacts-page">
