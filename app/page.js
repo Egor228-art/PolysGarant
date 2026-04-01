@@ -8,6 +8,7 @@ function HomeContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [mounted, setMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ email: "", password: "", name: "" });
@@ -17,14 +18,15 @@ function HomeContent() {
   const [calcResult, setCalcResult] = useState(null);
 
   useEffect(() => {
-    if (searchParams.get('login') === 'true') {
+    setMounted(true)
+    if (searchParams?.get('login') === 'true') {
       setIsModalOpen(true);
     }
   }, [searchParams]);
 
   if (status === "loading") return <div style={{ textAlign: "center", padding: "4rem" }}>Загрузка...</div>;
   
-  if (session) {
+  if (session && mounted) {
     router.push("/dashboard");
     return null;
   }
@@ -69,6 +71,10 @@ function HomeContent() {
     const price = calcAmount * (rates[calcType] || 0.03);
     setCalcResult(price);
   };
+
+  if (!mounted) {
+    return <div style={{ textAlign: "center", padding: "4rem" }}>Загрузка...</div>
+  }
 
   return (
     <div>
