@@ -67,7 +67,7 @@ export default function ProductsPage() {
     if (!session) {
       router.push('/?login=true')
     } else {
-      router.push(`/policy/new?type=${productId}`)
+      router.push(`/dashboard?newPolicy=${productId}`)
     }
   }
 

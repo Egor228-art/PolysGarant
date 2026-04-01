@@ -1,3 +1,5 @@
+"use client";
+
 export default function ContactsPage() {
   return (
     <div className="contacts-page">

@@ -1,6 +1,5 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
-import { SessionProvider } from 'next-auth/react'
 import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -118,6 +117,13 @@ function Footer() {
   )
 }
 
+// Клиентский компонент-обертка для SessionProvider
+function SessionProviderWrapper({ children }) {
+  'use client'
+  const { SessionProvider } = require('next-auth/react')
+  return <SessionProvider>{children}</SessionProvider>
+}
+
 function RootLayoutContent({ children }) {
   return (
     <>
@@ -132,9 +138,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru">
       <body className={inter.className}>
-        <SessionProvider>
+        <SessionProviderWrapper>
           <RootLayoutContent>{children}</RootLayoutContent>
-        </SessionProvider>
+        </SessionProviderWrapper>
       </body>
     </html>
   )
