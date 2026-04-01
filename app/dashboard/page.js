@@ -3,21 +3,24 @@ import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
-import { SessionProvider } from "next-auth/react";
-
 function DashboardContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
   const [policies, setPolicies] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
-    if (session?.user?.id) {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (mounted && session?.user?.id) {
       fetchPolicies();
       fetchTickets();
     }
-  }, [session]);
+  }, [mounted, session]);
 
   const fetchPolicies = async () => {
     const res = await fetch('/api/policies');
@@ -31,7 +34,8 @@ function DashboardContent() {
     if (data.success) setTickets(data.tickets);
   };
 
-  if (status === "loading") return <div style={{ textAlign: "center", padding: "4rem" }}>Загрузка...</div>;
+  if (status === "loading" || !mounted) return <div style={{ textAlign: "center", padding: "4rem" }}>Загрузка...</div>;
+  
   if (!session) {
     router.push("/");
     return null;

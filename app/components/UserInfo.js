@@ -1,14 +1,17 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
 export default function UserInfo() {
   const [mounted, setMounted] = useState(false)
-  const { data: session } = useSession()
+  const [session, setSession] = useState(null)
 
   useEffect(() => {
     setMounted(true)
+    import('next-auth/react').then(({ useSession }) => {
+      const { data } = useSession()
+      setSession(data)
+    })
   }, [])
 
   if (!mounted) {

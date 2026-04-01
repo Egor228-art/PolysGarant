@@ -1,22 +1,28 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
 export default function Navigation() {
   const [mounted, setMounted] = useState(false)
-  const pathname = usePathname()
-  const { data: session } = useSession()
+  const [session, setSession] = useState(null)
+  const [pathname, setPathname] = useState('')
 
   useEffect(() => {
     setMounted(true)
+    // Импортируем хуки только на клиенте
+    import('next/navigation').then(({ usePathname }) => {
+      setPathname(usePathname())
+    })
+    import('next-auth/react').then(({ useSession }) => {
+      const { data } = useSession()
+      setSession(data)
+    })
   }, [])
 
   const isActive = (path) => pathname === path ? 'active' : ''
 
-  // Пока компонент не смонтирован на клиенте, показываем упрощенную версию
+  // Во время SSR показываем статическую версию без хуков
   if (!mounted) {
     return (
       <nav className="main-nav">
