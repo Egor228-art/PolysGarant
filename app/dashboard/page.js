@@ -1,9 +1,12 @@
 "use client";
-export const dynamic = 'force-dynamic'
-import { useSession, signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
 
+export const dynamic = 'force-dynamic'
+
+import { useSession, signOut, SessionProvider } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+
+// Компонент с содержимым дашборда
 function DashboardContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -13,8 +16,8 @@ function DashboardContent() {
   const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (mounted && session?.user?.id) {
@@ -35,8 +38,10 @@ function DashboardContent() {
     if (data.success) setTickets(data.tickets);
   };
 
-  if (status === "loading" || !mounted) return <div style={{ textAlign: "center", padding: "4rem" }}>Загрузка...</div>;
-  
+  if (status === "loading" || !mounted) {
+    return <div style={{ textAlign: "center", padding: "4rem" }}>Загрузка...</div>;
+  }
+
   if (!session) {
     router.push("/");
     return null;
@@ -83,7 +88,7 @@ function DashboardContent() {
           <h2>Добро пожаловать, {session.user.name || session.user.email.split('@')[0]}!</h2>
           <div className="user-email">📧 {session.user.email}</div>
         </div>
-        <button onClick={() => signOut({ callbackUrl: "/" })} style={{ background: "#ef4444", boxShadow: "#ef444452" }}>
+        <button onClick={() => signOut({ callbackUrl: "/" })} style={{ background: "#ef4444" }}>
           Выйти
         </button>
       </div>
@@ -108,12 +113,12 @@ function DashboardContent() {
           <div className="grid">
             <div className="card">
               <h3>📄 Активные полисы</h3>
-              <p style={{ fontSize: '2rem', fontWeight: 'bold', transform: 'none' }}>{policies.filter(p => p.status === 'active').length}</p>
+              <p style={{ fontSize: '2rem', fontWeight: 'bold' }}>{policies.filter(p => p.status === 'active').length}</p>
               <button onClick={() => setActiveTab('policies')}>Управлять</button>
             </div>
             <div className="card">
               <h3>💬 Открытые обращения</h3>
-              <p style={{ fontSize: '2rem', fontWeight: 'bold', transform: 'none' }}>{tickets.filter(t => t.status !== 'resolved').length}</p>
+              <p style={{ fontSize: '2rem', fontWeight: 'bold' }}>{tickets.filter(t => t.status !== 'resolved').length}</p>
               <button onClick={() => setActiveTab('tickets')}>Смотреть</button>
             </div>
             <div className="card">
@@ -122,7 +127,7 @@ function DashboardContent() {
               <p>На следующий полис</p>
             </div>
           </div>
-          
+
           <div className="card" style={{ marginTop: '2rem', transform: 'none' }}>
             <h3>⚡ Быстрые действия</h3>
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '1rem' }}>
@@ -185,7 +190,7 @@ function DashboardContent() {
               <button type="submit">Отправить</button>
             </form>
           </div>
-          
+
           {tickets.length === 0 ? (
             <div className="card" style={{ textAlign: 'center' }}>
               <p>У вас пока нет обращений</p>
@@ -198,7 +203,7 @@ function DashboardContent() {
                   {getStatusBadge(ticket.status)}
                 </div>
                 <p>{ticket.message}</p>
-                <p style={{ fontSize: '0.875rem', color: '#80806b', marginTop: '1rem' }}>
+                <p style={{ fontSize: '0.875rem', color: '#6b7280', marginTop: '1rem' }}>
                   {new Date(ticket.created_at).toLocaleString()}
                 </p>
               </div>
@@ -248,10 +253,13 @@ function DashboardContent() {
   );
 }
 
+// Основной компонент с SessionProvider
 export default function Dashboard() {
   return (
     <SessionProvider>
-      <DashboardContent />
+      <Suspense fallback={<div style={{ textAlign: "center", padding: "4rem" }}>Загрузка...</div>}>
+        <DashboardContent />
+      </Suspense>
     </SessionProvider>
   );
 }
