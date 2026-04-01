@@ -1,12 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { SessionProvider } from "next-auth/react";
 
 function HomeContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ email: "", password: "", name: "" });
@@ -15,7 +16,14 @@ function HomeContent() {
   const [calcAmount, setCalcAmount] = useState(1000000);
   const [calcResult, setCalcResult] = useState(null);
 
+  useEffect(() => {
+    if (searchParams.get('login') === 'true') {
+      setIsModalOpen(true);
+    }
+  }, [searchParams]);
+
   if (status === "loading") return <div style={{ textAlign: "center", padding: "4rem" }}>Загрузка...</div>;
+  
   if (session) {
     router.push("/dashboard");
     return null;
@@ -161,7 +169,7 @@ function HomeContent() {
                 width: '2rem',
                 height: '2rem',
                 boxShadow: 'none',
-                color: '#80806b'
+                color: '#6b7280'
               }}
             >
               ×
@@ -202,7 +210,7 @@ function HomeContent() {
               </button>
             </form>
             
-            <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.875rem", color: "#807c6b" }}>
+            <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.875rem", color: "#6b7280" }}>
               {isLogin ? "Нет аккаунта? " : "Уже есть аккаунт? "}
               <button 
                 onClick={() => setIsLogin(!isLogin)} 
@@ -223,5 +231,5 @@ export default function Home() {
     <SessionProvider>
       <HomeContent />
     </SessionProvider>
-  );
+  )
 }
