@@ -1,8 +1,7 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
-import { SessionProvider, useSession } from 'next-auth/react'
+import { SessionProvider } from 'next-auth/react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -11,9 +10,13 @@ export const metadata = {
   description: 'Страхование авто, недвижимости, здоровья и путешествий. Оформите полис онлайн за 5 минут.',
 }
 
+// Клиентский компонент для навигации
 function Navigation() {
-  const { data: session } = useSession()
+  'use client'
+  const { usePathname } = require('next/navigation')
+  const { useSession } = require('next-auth/react')
   const pathname = usePathname()
+  const { data: session } = useSession()
 
   const isActive = (path) => {
     return pathname === path ? 'active' : ''
@@ -42,6 +45,25 @@ function Navigation() {
   )
 }
 
+// Клиентский компонент для отображения имени пользователя в шапке
+function UserInfo() {
+  'use client'
+  const { useSession } = require('next-auth/react')
+  const { data: session } = useSession()
+
+  return (
+    <div className="header-contacts">
+      <div className="phone">8-800-555-35-35</div>
+      <div className="work-time">Ежедневно 9:00-21:00</div>
+      {session?.user && (
+        <div className="user-badge">
+          👤 {session.user.name || session.user.email.split('@')[0]}
+        </div>
+      )}
+    </div>
+  )
+}
+
 function Header() {
   return (
     <header className="main-header">
@@ -52,10 +74,7 @@ function Header() {
             <p className="logo-subtitle">Страхование с заботой о вас</p>
           </div>
         </Link>
-        <div className="header-contacts">
-          <div className="phone">8-800-555-35-35</div>
-          <div className="work-time">Ежедневно 9:00-21:00</div>
-        </div>
+        <UserInfo />
       </div>
       <Navigation />
     </header>
@@ -93,7 +112,7 @@ function Footer() {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>© 2024 ПолисГарант. Все права защищены</p>
+        <p>© 2026 ПолисГарант. Все права защищены</p>
       </div>
     </footer>
   )
