@@ -2,7 +2,8 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import Link from 'next/link'
 import { Providers } from './providers'
-import dynamic from 'next/dynamic'
+import Navigation from './components/Navigation'
+import UserInfo from './components/UserInfo'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -10,10 +11,6 @@ export const metadata = {
   title: 'ПолисГарант | Надежная страховая компания',
   description: 'Страхование авто, недвижимости, здоровья и путешествий. Оформите полис онлайн за 5 минут.',
 }
-
-// Динамический импорт клиентских компонентов с отключенным SSR
-const Navigation = dynamic(() => import('./components/Navigation'), { ssr: false })
-const UserInfo = dynamic(() => import('./components/UserInfo'), { ssr: false })
 
 function Header() {
   return (
