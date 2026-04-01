@@ -1,11 +1,14 @@
 "use client";
+
 export const dynamic = 'force-dynamic'
-import { useState, useEffect } from "react";
+
+import { useState, useEffect, Suspense } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SessionProvider } from "next-auth/react";
 
-function HomeContent() {
+// Отдельный компонент, который использует useSearchParams
+function HomeContentWithParams() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -19,15 +22,17 @@ function HomeContent() {
   const [calcResult, setCalcResult] = useState(null);
 
   useEffect(() => {
-    setMounted(true)
+    setMounted(true);
     if (searchParams?.get('login') === 'true') {
       setIsModalOpen(true);
     }
   }, [searchParams]);
 
-  if (status === "loading") return <div style={{ textAlign: "center", padding: "4rem" }}>Загрузка...</div>;
-  
-  if (session && mounted) {
+  if (status === "loading" || !mounted) {
+    return <div style={{ textAlign: "center", padding: "4rem" }}>Загрузка...</div>;
+  }
+
+  if (session) {
     router.push("/dashboard");
     return null;
   }
@@ -35,7 +40,7 @@ function HomeContent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    
+
     if (isLogin) {
       const res = await signIn("credentials", {
         email: formData.email,
@@ -73,10 +78,6 @@ function HomeContent() {
     setCalcResult(price);
   };
 
-  if (!mounted) {
-    return <div style={{ textAlign: "center", padding: "4rem" }}>Загрузка...</div>
-  }
-
   return (
     <div>
       <div className="hero">
@@ -90,8 +91,8 @@ function HomeContent() {
       {/* Калькулятор */}
       <div className="form-container" style={{ marginTop: 0, background: "linear-gradient(135deg, var(--yellow) 0%, var(--orange) 100%)", color: "white" }}>
         <h3 style={{ textAlign: "center", marginBottom: "1.5rem", color: "white" }}>💰 Калькулятор страховки</h3>
-        <select 
-          value={calcType} 
+        <select
+          value={calcType}
           onChange={(e) => setCalcType(e.target.value)}
           style={{ width: '100%', padding: '0.75rem', border: 'none', borderRadius: '0.75rem', marginBottom: '1rem', background: 'white', color: '#333' }}
         >
@@ -100,9 +101,9 @@ function HomeContent() {
           <option value="health">❤️ ДМС (8% от суммы)</option>
           <option value="travel">✈️ Путешествия (4% от суммы)</option>
         </select>
-        <input 
-          type="number" 
-          value={calcAmount} 
+        <input
+          type="number"
+          value={calcAmount}
           onChange={(e) => setCalcAmount(Number(e.target.value))}
           placeholder="Страховая сумма (₽)"
           style={{ background: 'white', color: '#333' }}
@@ -149,22 +150,29 @@ function HomeContent() {
 
       {/* Модальное окно */}
       {isModalOpen && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0,0,0,0.5)',
-          backdropFilter: 'blur(5px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-          padding: '1rem'
-        }} onClick={() => setIsModalOpen(false)}>
-          <div className="form-container" style={{ maxWidth: '450px', width: '100%', margin: 0, position: 'relative' }} onClick={(e) => e.stopPropagation()}>
-            <button 
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0,0,0,0.5)',
+            backdropFilter: 'blur(5px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            padding: '1rem'
+          }}
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className="form-container"
+            style={{ maxWidth: '450px', width: '100%', margin: 0, position: 'relative' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
               onClick={() => setIsModalOpen(false)}
               style={{
                 position: 'absolute',
@@ -181,46 +189,46 @@ function HomeContent() {
             >
               ×
             </button>
-            
+
             <div className="form-tabs">
               <button className={`tab-btn ${isLogin ? 'active' : ''}`} onClick={() => setIsLogin(true)}>Вход</button>
               <button className={`tab-btn ${!isLogin ? 'active' : ''}`} onClick={() => setIsLogin(false)}>Регистрация</button>
             </div>
-            
+
             <form onSubmit={handleSubmit}>
               {!isLogin && (
-                <input 
-                  type="text" 
-                  placeholder="Ваше имя" 
-                  value={formData.name} 
-                  onChange={(e) => setFormData({...formData, name: e.target.value})} 
-                  required 
+                <input
+                  type="text"
+                  placeholder="Ваше имя"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  required
                 />
               )}
-              <input 
-                type="email" 
-                placeholder="Email" 
-                value={formData.email} 
-                onChange={(e) => setFormData({...formData, email: e.target.value})} 
-                required 
+              <input
+                type="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                required
               />
-              <input 
-                type="password" 
-                placeholder="Пароль" 
-                value={formData.password} 
-                onChange={(e) => setFormData({...formData, password: e.target.value})} 
-                required 
+              <input
+                type="password"
+                placeholder="Пароль"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                required
               />
               {error && <p style={{ color: "#dc2626", marginBottom: "1rem" }}>{error}</p>}
               <button type="submit" style={{ width: "100%" }}>
                 {isLogin ? "Войти" : "Зарегистрироваться"}
               </button>
             </form>
-            
+
             <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.875rem", color: "#6b7280" }}>
               {isLogin ? "Нет аккаунта? " : "Уже есть аккаунт? "}
-              <button 
-                onClick={() => setIsLogin(!isLogin)} 
+              <button
+                onClick={() => setIsLogin(!isLogin)}
                 style={{ background: "none", color: "var(--orange)", padding: 0, boxShadow: "none", display: "inline" }}
               >
                 {isLogin ? "Зарегистрироваться" : "Войти"}
@@ -233,10 +241,19 @@ function HomeContent() {
   );
 }
 
+// Основной компонент с Suspense
+function HomeContent() {
+  return (
+    <Suspense fallback={<div style={{ textAlign: "center", padding: "4rem" }}>Загрузка...</div>}>
+      <HomeContentWithParams />
+    </Suspense>
+  );
+}
+
 export default function Home() {
   return (
     <SessionProvider>
       <HomeContent />
     </SessionProvider>
-  )
+  );
 }
